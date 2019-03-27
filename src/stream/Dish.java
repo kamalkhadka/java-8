@@ -26,6 +26,10 @@ public class Dish {
         return calories;
     }
 
+    public Type getType() {
+        return type;
+    }
+
     @Override
     public String toString() {
         return name;

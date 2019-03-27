@@ -4,6 +4,10 @@ import stream.Dish;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
+
+import static java.util.stream.Collectors.*;
 
 public class GroupingBy {
 
@@ -20,6 +24,21 @@ public class GroupingBy {
                       new Dish("prawns", false, 300, Dish.Type.FISH),
                       new Dish("salmon", false, 450, Dish.Type.FISH));
 
-      
+      Map<CaloricLevel, List<Dish>> dishesByCaloricLevel = menu.stream().collect(groupingBy(dish ->
+      {
+          if(dish.getCalories() <= 400) return CaloricLevel.DIET;
+          else if (dish.getCalories() <= 700) return CaloricLevel.NORMAL;
+          else return CaloricLevel.FAT;
+      }));
+
+      Map<Dish.Type, Map<CaloricLevel, List<Dish>>> dishesByTypeCaloricLevel =
+              menu.stream().collect(groupingBy(Dish::getType,
+                      groupingBy( dish -> {
+                          if(dish.getCalories() <= 400) return CaloricLevel.DIET;
+                          else if (dish.getCalories() <= 700) return CaloricLevel.NORMAL;
+                          else return CaloricLevel.FAT;
+                      })));
   }
+
+  public enum CaloricLevel { DIET, NORMAL, FAT }
 }
